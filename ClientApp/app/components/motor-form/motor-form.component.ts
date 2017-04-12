@@ -1,3 +1,4 @@
+import { MakeService } from './../../services/make.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,10 +7,21 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./motor-form.component.css']
 })
 export class MotorFormComponent implements OnInit {
+  makes: any[];
+  models: any[];
+  vechile: any = {};
 
-  constructor() { }
+  constructor(private makeService: MakeService) { }
 
   ngOnInit() {
+    this.makeService.getMakes().subscribe(makes => 
+      this.makes = makes);
+  }
+
+  onMakeChange(){
+    //console.log("VEHICLE", this.vechile);
+    var selectedMake = this.makes.find(m=> m.id == this.vechile.make);
+    this.models = selectedMake ? selectedMake.models : [];
   }
 
 }
