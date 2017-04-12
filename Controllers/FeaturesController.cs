@@ -17,7 +17,6 @@ namespace justmotors.Controllers
         {
             this.mapper = mapper;
             this.context = context;
-
         }
         
         [HttpGet("/api/features")]
@@ -26,5 +25,6 @@ namespace justmotors.Controllers
             var features = await context.Features.ToListAsync();
             return mapper.Map<List<Feature>, List<FeatureResource>>(features);
         }
+
     }
 }

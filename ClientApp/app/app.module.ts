@@ -1,10 +1,11 @@
+import { FeatureService } from './services/feature.service';
 import { FormsModule } from '@angular/forms';
 
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { UniversalModule } from 'angular2-universal';
 
-import { MakeService } from './services/make.service';
+import { MotorService } from './services/make.service';
 import { AppComponent } from './components/app/app.component'
 import { NavMenuComponent } from './components/navmenu/navmenu.component';
 import { HomeComponent } from './components/home/home.component';
@@ -35,7 +36,7 @@ import { MotorFormComponent } from './components/motor-form/motor-form.component
         ])
     ],
     providers: [
-        MakeService
+        MotorService, FeatureService
     ]
 })
 export class AppModule {

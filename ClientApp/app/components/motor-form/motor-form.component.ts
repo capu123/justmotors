@@ -1,4 +1,5 @@
-import { MakeService } from './../../services/make.service';
+import { FeatureService } from './../../services/feature.service';
+import { MotorService } from './../../services/make.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -10,12 +11,17 @@ export class MotorFormComponent implements OnInit {
   makes: any[];
   models: any[];
   vechile: any = {};
+  features: any[];
 
-  constructor(private makeService: MakeService) { }
+  constructor(
+    private motorService: MotorService) { }
 
   ngOnInit() {
-    this.makeService.getMakes().subscribe(makes => 
+    this.motorService.getMakes().subscribe(makes => 
       this.makes = makes);
+
+    this.motorService.getFeatures().subscribe(features =>
+      this.features = features);
   }
 
   onMakeChange(){
@@ -23,5 +29,6 @@ export class MotorFormComponent implements OnInit {
     var selectedMake = this.makes.find(m=> m.id == this.vechile.make);
     this.models = selectedMake ? selectedMake.models : [];
   }
+
 
 }
