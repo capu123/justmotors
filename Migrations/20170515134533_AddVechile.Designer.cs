@@ -8,9 +8,10 @@ using justmotors.Persistence;
 namespace Justmotors.Migrations
 {
     [DbContext(typeof(JustmotorsDbContext))]
-    partial class JustmotorsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170515134533_AddVechile")]
+    partial class AddVechile
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
