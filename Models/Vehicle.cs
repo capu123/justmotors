@@ -6,8 +6,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace justmotors.Models
 {
-    [Table("Vechiles")]
-    public class Vechile
+    [Table("Vehicles")]
+    public class Vehicle
     {
         public int Id { get; set; }
         public int ModelId { get; set; }
@@ -26,11 +26,11 @@ namespace justmotors.Models
         public string ContactPhone { get; set; }
         public DateTime LastUpdate { get; set; }
 
-        public ICollection<VechileFeature> Features { get; set; }
+        public ICollection<VehicleFeature> Features { get; set; }
 
-        public Vechile()
+        public Vehicle()
         {
-            Features = new Collection<VechileFeature>();
+            Features = new Collection<VehicleFeature>();
         }
     }
 }

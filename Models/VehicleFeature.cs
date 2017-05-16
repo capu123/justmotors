@@ -2,12 +2,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace justmotors.Models
 {
-    [Table("VechileFeatures")]
-    public class VechileFeature
+    [Table("VehicleFeatures")]
+    public class VehicleFeature
     {
-        public int VechileId { get; set; }
+        public int VehicleId { get; set; }
         public int FeatureId { get; set; }
-        public Vechile Vechile { get; set; }
+        public Vehicle Vehicle { get; set; }
 
         public Feature Feature { get; set; }
     }

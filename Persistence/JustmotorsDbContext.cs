@@ -14,8 +14,9 @@ namespace justmotors.Persistence
 
         protected override void OnModelCreating(ModelBuilder moduleBuilder)
         {
-            moduleBuilder.Entity<VechileFeature>().HasKey(vf =>
-                 new { vf.VechileId, vf.FeatureId});
+            // creating composite key (combo of VechileId + FeatureId)
+            moduleBuilder.Entity<VehicleFeature>().HasKey(vf =>
+                 new { vf.VehicleId, vf.FeatureId });
         }
     }
 }
