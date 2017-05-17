@@ -14,8 +14,10 @@ namespace justmotors.Controllers
     {
         private readonly IMapper mapper;
         private readonly JustmotorsDbContext context;
-        public VehiclesController(IMapper mapper, JustmotorsDbContext context)
+        private readonly IVehicleRepository repository;
+        public VehiclesController(IMapper mapper, JustmotorsDbContext context, IVehicleRepository repository)
         {
+            this.repository = repository;
             this.context = context;
             this.mapper = mapper;
         }
@@ -26,27 +28,13 @@ namespace justmotors.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            /* 
-            var model = await context.Models.FindAsync(vehicleResource.ModelId);
-            if(model == null)
-            {
-                ModelState.AddModelError("ModelId", "Invalid modelId");
-                return BadRequest(ModelState);
-            } 
-            */
-
             var vehicle = mapper.Map<SaveVehicleResource, Vehicle>(vehicleResource);
             vehicle.LastUpdate = DateTime.Now;
 
             context.Vehicles.Add(vehicle);
             await context.SaveChangesAsync();
 
-            vehicle =  await context.Vehicles
-                    .Include(v =>v.Features)
-                        .ThenInclude(vf => vf.Feature)        
-                    .Include(v => v.Model)
-                        .ThenInclude(m => m.Make)
-                    .SingleOrDefaultAsync(v => v.Id == vehicle.Id);
+            vehicle = await repository.GetVehicle(vehicle.Id);
 
             var result = mapper.Map<Vehicle, VehicleResource>(vehicle);
             return Ok(result);
@@ -59,14 +47,9 @@ namespace justmotors.Controllers
                 return BadRequest(ModelState);
 
             //var vehicle = await context.Vehicles.Include(v => v.Features).SingleOrDefaultAsync(v => v.Id == id);
-            var vehicle =  await context.Vehicles
-                    .Include(v =>v.Features)
-                        .ThenInclude(vf => vf.Feature)        
-                    .Include(v => v.Model)
-                        .ThenInclude(m => m.Make)
-                    .SingleOrDefaultAsync(v => v.Id == id);
+            var vehicle = await repository.GetVehicle(id);
 
-            if(vehicle == null)
+            if (vehicle == null)
                 return NotFound();
 
             mapper.Map<SaveVehicleResource, Vehicle>(vehicleResource, vehicle);
@@ -81,9 +64,9 @@ namespace justmotors.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteVehicle(int id)
         {
-            var vehicle =  await context.Vehicles.FindAsync(id);
+            var vehicle = await context.Vehicles.FindAsync(id);
 
-            if(vehicle == null)
+            if (vehicle == null)
                 return NotFound();
 
             context.Remove(vehicle);
@@ -95,17 +78,12 @@ namespace justmotors.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetVehicle(int id)
         {
-         // var vehicle =  await context.Vehicles.FindAsync(id);
-            var vehicle =  await context.Vehicles
-                    .Include(v =>v.Features)
-                        .ThenInclude(vf => vf.Feature)        
-                    .Include(v => v.Model)
-                        .ThenInclude(m => m.Make)
-                    .SingleOrDefaultAsync(v => v.Id == id);
+            // var vehicle =  await context.Vehicles.FindAsync(id);
+            var vehicle = await repository.GetVehicle(id);
 
-            if(vehicle == null)
+            if (vehicle == null)
                 return NotFound();
-            
+
             var vehicleResource = mapper.Map<Vehicle, VehicleResource>(vehicle);
 
             return Ok(vehicleResource);
